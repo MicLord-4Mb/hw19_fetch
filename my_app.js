@@ -84,13 +84,17 @@ async function handleSearch(postId, resultEl) {
   }
 
   try {
-    const resPost = await fetch(`${baseURL}/posts/${postId}`, {signal});
-    if (!resPost.ok) throw new Error('Post not found');
-    const post = await resPost.json();
+    const post = await fetchJSON(
+      `${baseURL}/posts/${postId}`,
+      {signal},
+      'Post not found'
+    );
 
-    const userRes = await fetch(`${baseURL}/users/${post.userId}`, {signal});
-    if (!userRes.ok) throw new Error('User data not found');
-    const user = await userRes.json();
+    const user = await fetchJSON(
+      `${baseURL}/users/${post.userId}`,
+      {signal},
+      'User data not found'
+    );
 
     const successAlert = MyUI.Tag('div', {className: 'alert alert-success'});
     const infoText = MyUI.Tag('p', {
@@ -139,11 +143,12 @@ async function loadMorePosts() {
   if (sentinel) sentinel.textContent = 'Loading posts...';
 
   try {
-    const res = await fetch(`${baseURL}/posts?_page=${page}&_limit=${POST_LIMIT}`);
+    const posts = await fetchJSON(
+      `${baseURL}/posts?_page=${page}&_limit=${POST_LIMIT}`,
+      {},
+      'Failed to fetch posts'
+    );
 
-    if (!res.ok) throw new Error('Failed to fetch posts');
-
-    const posts = await res.json();
     if (posts.length < POST_LIMIT) {
       hasMore = false;
       if (sentinel) sentinel.textContent = 'End of feed.';
@@ -260,4 +265,10 @@ function truncateText(text, maxLength) {
   if (lastSpaceIndex === -1) return sliced + '...';
 
   return sliced.slice(0, lastSpaceIndex) + '...';
+}
+
+async function fetchJSON(url, options ={}, errMsg='') {
+  const response = await fetch(url, options);
+  if (!response.ok) throw new Error(`HTTP error: ${response.status} (${errMsg})`);
+  return response.json();
 }
