@@ -22,7 +22,9 @@ const MyUI = (function() {
       if (key.startsWith('on') && typeof value === 'function') {
         const eventName = key.substring(2).toLowerCase();
         el.addEventListener(eventName, value);
-      }else if (value !== undefined && value !== null) {
+      } else if (typeof value === 'boolean') {
+        el.toggleAttribute(key, value);
+      } else if (value !== undefined && value !== null) {
         el.setAttribute(key, value);
       }
     }
@@ -91,24 +93,24 @@ const MyUI = (function() {
       const $cardBody = createBaseElement('div', { className: 'card-body d-flex flex-column' });
 
       if (meta) {
-        $cardBody.appendChild(createBaseElement('div', {
+        $cardBody.append(createBaseElement('div', {
           text: meta,
           className: 'text-body-secondary small mb-2',
         }));
       }
 
       if (title){
-        $cardBody.appendChild(createBaseElement('h5', { text: title, className: 'card-title' }));
+        $cardBody.append(createBaseElement('h5', { text: title, className: 'card-title' }));
       }
 
       if (content){
-        $cardBody.appendChild(createBaseElement('p', { text: content, className: 'card-text' }));
+        $cardBody.append(createBaseElement('p', { text: content, className: 'card-text' }));
       }
 
       if (children) {
         const childrenArray = Array.isArray(children) ? children : [children];
         childrenArray.forEach(child => {
-          if (child instanceof HTMLElement) $cardBody.appendChild(child);
+          if (child instanceof HTMLElement) $cardBody.append(child);
         });
       }
 
