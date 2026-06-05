@@ -109,9 +109,8 @@ const MyUI = (function() {
 
       if (children) {
         const childrenArray = Array.isArray(children) ? children : [children];
-        childrenArray.forEach(child => {
-          if (child instanceof HTMLElement) $cardBody.append(child);
-        });
+        const validChildren = childrenArray.filter(child => child instanceof HTMLElement);
+        $cardBody.append(...validChildren);
       }
 
       $card.append($cardBody);
