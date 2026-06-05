@@ -56,14 +56,9 @@ function setupSearchUI() {
     }
   });
 
-  inputGroup.appendChild(searchInput);
-  inputGroup.appendChild(searchBtn);
-
-  searchWrapper.appendChild(searchTitle);
-  searchWrapper.appendChild(inputGroup);
-  searchWrapper.appendChild(resultContainer);
-
-  container.appendChild(searchWrapper);
+  inputGroup.append(searchInput, searchBtn);
+  searchWrapper.append(searchTitle, inputGroup, resultContainer);
+  container.append(searchWrapper);
 }
 
 async function handleSearch(postId, resultEl) {
@@ -79,7 +74,7 @@ async function handleSearch(postId, resultEl) {
   if (!postId.trim()) {
     resultEl.textContent = ''
     const warning = MyUI.Tag('div', {text: 'Please enter a post ID.', className: 'alert alert-warning'});
-    resultEl.appendChild(warning);
+    resultEl.append(warning);
     return;
   }
 
@@ -103,8 +98,8 @@ async function handleSearch(postId, resultEl) {
     });
 
     resultEl.textContent = '';
-    successAlert.appendChild(infoText);
-    resultEl.appendChild(successAlert);
+    successAlert.append(infoText);
+    resultEl.append(successAlert);
 
   } catch (err) {
     if (err.name === 'AbortError') {
@@ -119,20 +114,16 @@ async function handleSearch(postId, resultEl) {
     });
 
     resultEl.textContent = '';
-    resultEl.appendChild(errorAlert);
+    resultEl.append(errorAlert);
   }
 }
 
 
 function setupPostsLayout() {
   const feedTitle = MyUI.Tag('h2', {text: 'Posts Feed', className: 'mb-4'});
-  container.appendChild(feedTitle);
-
   postsGrid = MyUI.Tag('div', {className: 'row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4'});
-  container.appendChild(postsGrid);
-
   const sentinel = MyUI.Tag('div', {id: 'scroll-sentinel', className: 'text-center my-4 p-2'});
-  container.appendChild(sentinel);
+  container.append(feedTitle, postsGrid, sentinel);
 }
 
 async function loadMorePosts() {
@@ -156,10 +147,15 @@ async function loadMorePosts() {
       sentinel.textContent = '';
     }
 
+    //a small cache for a heap of cards
+    const fragment = document.createDocumentFragment();
+
     posts.forEach(post => {
       const cardCol = createPostCardElement(post);
-      postsGrid.appendChild(cardCol);
+      fragment.append(cardCol);
     });
+
+    postsGrid.append(fragment);
 
     page++;
 
@@ -220,7 +216,7 @@ function createPostCardElement(post) {
         }
       }
     });
-    bodyWrapper.appendChild(toggleLink);
+    bodyWrapper.append(toggleLink);
   }
 
   // const capitalizedTitle = post.title.charAt(0).toUpperCase() + post.title.slice(1);
@@ -231,7 +227,7 @@ function createPostCardElement(post) {
     children: [bodyWrapper]
   });
 
-  col.appendChild(card);
+  col.append(card);
   return col;
 }
 
