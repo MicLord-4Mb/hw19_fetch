@@ -29,17 +29,20 @@ const MyUI = (function() {
 
     if (children) {
       const childrenArray = Array.isArray(children) ? children : [children];
-      childrenArray.forEach(child => {
-        if (child) {
-          if (child instanceof HTMLElement) {
-            el.appendChild(child);
-          } else {
-            el.appendChild(document.createTextNode(child));
-          }
-        }
-      });
-    }
+      // childrenArray.forEach(child => {
+      //   if (child) {
+      //     if (child instanceof HTMLElement) {
+      //       el.appendChild(child);
+      //     } else {
+      //       el.appendChild(document.createTextNode(child));
+      //     }
+      //   }
+      // });
 
+      // filtered null/undefined
+      const validChildren = childrenArray.filter(child => child !== null && child !== undefined);
+      el.append(...validChildren);
+    }
     return el;
   }
 
@@ -109,7 +112,7 @@ const MyUI = (function() {
         });
       }
 
-      $card.appendChild($cardBody);
+      $card.append($cardBody);
       return $card;
     }
   };
