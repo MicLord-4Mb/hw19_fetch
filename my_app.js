@@ -51,7 +51,7 @@ function setupSearchUI() {
     text: 'Find Author',
     className: 'btn-secondary',
     onClick: () => {
-      handleSearch(searchInput.value, resultContainer);
+      void handleSearch(searchInput.value, resultContainer);
       // searchInput.value = '';
     }
   });
@@ -167,6 +167,7 @@ async function loadMorePosts() {
 *      if ((rect.top - 150) < window.innerHeight) {
 *        loadMorePosts();
 *      }
+*    }
 *    test 2 ... I get it!!! Work!!!!- callback for the first run
 *    ... with zoom in/out not :'-(((((
 *    if (callback && typeof callback === 'function') {
@@ -242,7 +243,7 @@ function setupInfiniteScroll() {
   globalObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        loadMorePosts();
+        void loadMorePosts();
       }
     });
   }, observerOptions);
