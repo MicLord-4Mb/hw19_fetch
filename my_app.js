@@ -104,6 +104,7 @@ async function handleSearch(postId, resultEl) {
   } catch (err) {
     if (err.name === 'AbortError') {
       console.warn(`[Search] Transaction aborted for post post ID: ${postId}.`);
+      return;
     }
 
     console.error(err);
