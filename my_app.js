@@ -67,6 +67,13 @@ function setupSearchUI() {
 }
 
 async function handleSearch(postId, resultEl) {
+  if (currentSearchController) {
+    currentSearchController.abort();
+  }
+
+  currentSearchController = new AbortController();
+  const signal = currentSearchController.signal;
+
   resultEl.textContent = 'Loading...'
 
   if (!postId.trim()) {
@@ -77,11 +84,11 @@ async function handleSearch(postId, resultEl) {
   }
 
   try {
-    const resPost = await fetch(`${baseURL}/posts/${postId}`);
+    const resPost = await fetch(`${baseURL}/posts/${postId}`, {signal});
     if (!resPost.ok) throw new Error('Post not found');
     const post = await resPost.json();
 
-    const userRes = await fetch(`${baseURL}/users/${post.userId}`);
+    const userRes = await fetch(`${baseURL}/users/${post.userId}`, {signal});
     if (!userRes.ok) throw new Error('User data not found');
     const user = await userRes.json();
 
@@ -96,6 +103,10 @@ async function handleSearch(postId, resultEl) {
     resultEl.appendChild(successAlert);
 
   } catch (err) {
+    if (err.name === 'AbortError') {
+      console.warn(`[Search] Transaction aborted for post post ID: ${postId}.`);
+    }
+
     console.error(err);
 
     const errorAlert = MyUI.Tag('div', {
