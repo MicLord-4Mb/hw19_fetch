@@ -14,6 +14,7 @@ let hasMore = true;
 let postsGrid = null;
 
 let globalObserver = null;
+let currentSearchController = null;
 
 show.onclick = () => {
   // fetch(`${baseURL}/posts`)

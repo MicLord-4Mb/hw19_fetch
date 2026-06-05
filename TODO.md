@@ -1,0 +1,3 @@
+1. multi fetch problem (not for current project, BUT!)
+2. render DOM flow ... rerender all the time when create card .. 12 or more in a row ... 
+3. ... On the construction ... :-)
