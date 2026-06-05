@@ -103,7 +103,7 @@ async function handleSearch(postId, resultEl) {
 
   } catch (err) {
     if (err.name === 'AbortError') {
-      console.warn(`[Search] Transaction aborted for post post ID: ${postId}.`);
+      console.warn(`[Search] Transaction aborted for post ID: ${postId}.`);
       return;
     }
 
@@ -199,7 +199,7 @@ function createPostCardElement(post) {
   const textContainer = MyUI.Tag('span', {text: truncatedText});
   const bodyWrapper = MyUI.Tag('p', {className: 'card-text flex-grow-1 mb-0'});
 
-  bodyWrapper.appendChild(textContainer);
+  bodyWrapper.append(textContainer);
 
   if (isLongText) {
     const toggleLink = MyUI.Tag('span', {
